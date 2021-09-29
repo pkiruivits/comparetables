@@ -2,6 +2,18 @@
     <head>
         <title>comparing strings</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        .highlight {
+  background-color: #ccc;
+}
+#textareaBefore1 {
+  background-color: white;
+}
+#textareaAfter1 {
+  background-color: white;
+}
+    </style>
     </head>
 <body style="background-color:rgb(64, 230, 174);">
   
@@ -29,6 +41,7 @@
   
    <!-- <button id="buttonCompare" onclick="buttonCompareClicked();">Compare</button>
    -->
+   <input type="button" value="Submit" id="btnSubmit" />
     <button id="buttonCompare" onclick="CompareTables();">Compare</button>
   
     <div>
@@ -51,6 +64,99 @@ document.getElementById('textareaAfter1').addEventListener('input', function(){
     var elements=document.getElementById('textareaAfter1')
     elements[0].innerHTML = elements[0].innerHTML.replace(/\u2013|\u2014/g, "-"); 
 })
+$(document).ready(function(){
+  $("button").click(function(){
+    $("p").hide();
+  });
+  $("#btnSubmit").click(function() {
+  
+   var mainPara = $('#DefaultDiv p'),
+      firstPara = $("#FirstDiv  p"),
+      secondPara = $("#SecondDiv  p");    
+    highlightDifferencesParaGraphs(mainPara, firstPara)
+    highlightDifferencesParaGraphs(mainPara, secondPara)
+    
+    var mainSpan = $('#DefaultDiv span'),
+      firstSpan = $("#FirstDiv  span"),
+      secondSpan = $("#SecondDiv  span");    
+    highlightDifferencesSpans(mainSpan, firstSpan)
+    highlightDifferencesSpans(mainSpan, secondSpan)
+
+    var mainListItem = $('#DefaultDiv div ul'),
+      firstListItem = $("#FirstDiv  div ul"),
+      secondListItem = $("#SecondDiv  div ul");
+    highlightDifferencesListItems(mainListItem, firstListItem)
+    highlightDifferencesListItems(mainListItem, secondListItem)
+
+    var main = $('#textareaBefore1 div tbody'),
+      first = $("#textareaAfter1 tbody"),
+      second = $("#SecondDiv tbody");
+    highlightTableDifferences(main, first)
+    //highlightTableDifferences(main, second)
+
+  })
+
+ function highlightDifferencesParaGraphs(main, another) {
+    var mainRows = main,
+      anotherRows = another;
+    mainRows.each(function(rowNumber, mainRow) {
+      var anotherRow = anotherRows.eq(rowNumber),
+        anotherCells = anotherRow,
+        mainCells = $(mainRow);
+      mainCells.each(function(colNumber, cell) {
+        var anotherCell = anotherCells.eq(colNumber)
+        anotherCell.toggleClass("highlight", anotherCell.text() !== $(cell).text())
+      })
+    })
+
+  }
+
+
+  function highlightDifferencesSpans(main, another) {
+    var mainRows = main,
+      anotherRows = another;
+    mainRows.each(function(rowNumber, mainRow) {
+      var anotherRow = anotherRows.eq(rowNumber),
+        anotherCells = anotherRow,
+        mainCells = $(mainRow);
+      mainCells.each(function(colNumber, cell) {
+        var anotherCell = anotherCells.eq(colNumber)
+        anotherCell.toggleClass("highlight", anotherCell.text() !== $(cell).text())
+      })
+    })
+
+  }
+
+  function highlightDifferencesListItems(main, another) {
+    var mainRows = main.children(),
+      anotherRows = another.children();
+    mainRows.each(function(rowNumber, mainRow) {
+      var anotherRow = anotherRows.eq(rowNumber),
+        anotherCells = anotherRow,
+        mainCells = $(mainRow);
+      mainCells.each(function(colNumber, cell) {
+        var anotherCell = anotherCells.eq(colNumber)
+        anotherCell.toggleClass("highlight", anotherCell.text() !== $(cell).text())
+      })
+    })
+
+  }
+
+  function highlightTableDifferences(main, another) {
+    var mainRows = main.children(),
+      anotherRows = another.children();
+    mainRows.each(function(rowNumber, mainRow) {
+      var anotherRow = anotherRows.eq(rowNumber),
+        anotherCells = anotherRow.children(),
+        mainCells = $(mainRow).children();
+      mainCells.each(function(colNumber, cell) {
+        var anotherCell = anotherCells.eq(colNumber)
+        anotherCell.toggleClass("highlight", anotherCell.text() !== $(cell).text())
+      })
+    })
+
+  }
+});
 // events
 function CompareTables()
    {//var table1 = document.querySelector("#textareaBefore1>div >table:first-of-type");
